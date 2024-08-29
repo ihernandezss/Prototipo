@@ -172,7 +172,23 @@ def menu_transportista(sistema, transportista):
         
         if opcion == "1":
             id_job = input("Ingrese el ID del envío: ")
-            nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_TRANSITO_AEREO, EN_TRANSITO_TERRESTRE, EN_CENTRO_LOGISTICO, EN_CAMINO, ENTREGADO): ")
+            nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
+            if nuevo_estado == "RECIBIDO":
+                pass
+            elif nuevo_estado == "EN_REPARTO_AEREO":
+                pass
+            elif nuevo_estado == "VIAJANDO_A_TU_DESTINO":
+                pass
+            elif nuevo_estado == "EN_CENTRO_LOGISTICO":
+                pass
+            elif nuevo_estado == "EN_CAMINO_HACIA_TI":
+                pass
+            elif nuevo_estado == "ENTREGADO":
+                pass
+            else:
+                print("Estado no válido")
+                continue
+            
             ubicacion = input("Ingrese la ubicación actual: ")
             if sistema.actualizar_estado_envio(id_job, EstadoEnvio[nuevo_estado], ubicacion):
                 print("Estado actualizado con éxito")
@@ -226,7 +242,7 @@ def menu_logistica(sistema):
             id_job = input("Ingrese el ID del envío: ")
             print(sistema.obtener_info_envio(id_job))
         elif opcion == "3":
-            nombre = input("Ingrese el nombre del empleado: ")
+            nombre = input("\nIngrese el nombre del empleado: ")
             rol = input("Ingrese el rol del empleado (TRANSPORTISTA/QUIMICO/GERENTE_COMERCIAL): ")
             if rol == "TRANSPORTISTA":
                 nuevo_empleado = Transportista(nombre)
@@ -287,7 +303,7 @@ def menu_gerente_comercial(sistema, gerente):
             identificador_cliente = input("Ingrese el identificador del cliente: ")
             if identificador_cliente in sistema.clientes:
                 cliente = sistema.clientes[identificador_cliente]
-                guia_aerea = input("Ingrese el número de guía aérea: ")
+                guia_aerea = input("Ingrese el número de guía aérea(si aplica): ")
                 tipo_producto = input("Ingrese el tipo de producto: ")
                 destino = input("Ingrese el destino: ")
                 temperatura = input("Ingrese la temperatura requerida: ")
@@ -322,7 +338,7 @@ def menu_principal():
         opcion = input("Seleccione su tipo de usuario: ")
         
         if opcion == "1":
-            identificador = input("Ingrese su identificador de cliente: ")
+            identificador = input("\nIngrese su identificador de cliente: ")
             if identificador in sistema.clientes:
                 menu_cliente(sistema, sistema.clientes[identificador])
             else:
@@ -331,7 +347,7 @@ def menu_principal():
             menu_destinatario(sistema)
         elif opcion == "3":
             if sistema.transportistas:
-                print("Transportistas disponibles:")
+                print("\nTransportistas disponibles:")
                 for i, transportista in enumerate(sistema.transportistas):
                     print(f"{i+1}. {transportista.nombre}")
                 seleccion = int(input("Seleccione un transportista: ")) - 1
@@ -345,7 +361,7 @@ def menu_principal():
             menu_logistica(sistema)
         elif opcion == "5":
             if sistema.quimicos:
-                print("Químicos disponibles:")
+                print("\nQuímicos disponibles:")
                 for i, quimico in enumerate(sistema.quimicos):
                     print(f"{i+1}. {quimico.nombre}")
                 seleccion = int(input("Seleccione un químico: ")) - 1
@@ -359,7 +375,7 @@ def menu_principal():
             if sistema.usuarios:
                 gerentes = [usuario for usuario in sistema.usuarios.values() if usuario.rol == Rol.GERENTE_COMERCIAL]
                 if gerentes:
-                    print("Gerentes Comerciales disponibles:")
+                    print("\nGerentes Comerciales disponibles:")
                     for i, gerente in enumerate(gerentes):
                         print(f"{i+1}. {gerente.nombre}")
                     seleccion = int(input("Seleccione un Gerente Comercial: ")) - 1
