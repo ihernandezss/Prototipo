@@ -36,6 +36,10 @@ class Quimico(Usuario):
     def __init__(self, nombre):
         super().__init__(nombre, Rol.QUIMICO)
 
+class GerenteComercial(Usuario):
+    def __init__(self, nombre):
+        super().__init__(nombre, Rol.GERENTE_COMERCIAL)
+
 class CambioEstado:
     def __init__(self, estado, fecha, ubicacion):
         self.estado = estado
@@ -71,6 +75,7 @@ class SistemaSeguimiento:
         self.clientes = {}
         self.transportistas = []
         self.quimicos = []
+        self.gerentes_comerciales = []
 
     def agregar_usuario(self, usuario):
         self.usuarios[usuario.nombre] = usuario
@@ -80,6 +85,8 @@ class SistemaSeguimiento:
             self.transportistas.append(usuario)
         elif isinstance(usuario, Quimico):
             self.quimicos.append(usuario)
+        elif isinstance(usuario, GerenteComercial):
+            self.gerentes_comerciales.append(usuario)
 
     def crear_envio(self, guia_aerea, cliente, tipo_producto, destino, temperatura, hora_entrega):
         id_job = f"JOB{len(self.envios) + 1:03}"
@@ -182,49 +189,57 @@ def menu_transportista(sistema, transportista):
 def menu_logistica(sistema):
     while True:
         print("\n--- Menú Logística ---")
-        print("1. Ingresar nuevo cliente")
-        print("2. Crear nuevo envío")
-        print("3. Ver información del envío")
-        print("4. Agregar empleado")
-        print("5. Salir")
+        print("1. Modificar datos de envío")
+        print("2. Ver información del envío")
+        print("3. Agregar empleado")
+        print("4. Salir")
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-            nombre = input("Ingrese el nombre del cliente: ")
-            identificador = input("Ingrese el identificador del cliente: ")
-            nuevo_cliente = Cliente(nombre, identificador)
-            sistema.agregar_usuario(nuevo_cliente)
-            print(f"Nuevo cliente {nombre} ingresado")
-        elif opcion == "2":
-            identificador_cliente = input("Ingrese el identificador del cliente: ")
-            if identificador_cliente in sistema.clientes:
-                cliente = sistema.clientes[identificador_cliente]
-                guia_aerea = input("Ingrese el número de guía aérea: ")
-                tipo_producto = input("Ingrese el tipo de producto: ")
-                destino = input("Ingrese el destino: ")
-                temperatura = input("Ingrese la temperatura requerida: ")
-                hora_entrega = input("Ingrese la hora de entrega (YYYY-MM-DD HH:MM): ")
-                hora_entrega = datetime.datetime.strptime(hora_entrega, "%Y-%m-%d %H:%M")
-                id_job = sistema.crear_envio(guia_aerea, cliente, tipo_producto, destino, temperatura, hora_entrega)
-                print(f"Nuevo envío creado con ID: {id_job}")
+            id_job = input("Ingrese el ID del envío a modificar: ")
+            if id_job in sistema.envios:
+                envio = sistema.envios[id_job]
+                print("Datos actuales del envío:")
+                print(sistema.obtener_info_envio(id_job))
+                
+                tipo_producto = input("Nuevo tipo de producto (deje en blanco para no modificar): ")
+                if tipo_producto:
+                    envio.tipo_producto = tipo_producto
+                
+                destino = input("Nuevo destino (deje en blanco para no modificar): ")
+                if destino:
+                    envio.destino = destino
+                
+                temperatura = input("Nueva temperatura (deje en blanco para no modificar): ")
+                if temperatura:
+                    envio.temperatura = temperatura
+                
+                hora_entrega = input("Nueva hora de entrega (YYYY-MM-DD HH:MM) (deje en blanco para no modificar): ")
+                if hora_entrega:
+                    envio.hora_entrega = datetime.datetime.strptime(hora_entrega, "%Y-%m-%d %H:%M")
+                
+                print("Datos del envío actualizados:")
+                print(sistema.obtener_info_envio(id_job))
             else:
-                print("Cliente no encontrado")
-        elif opcion == "3":
+                print("Envío no encontrado")
+        elif opcion == "2":
             id_job = input("Ingrese el ID del envío: ")
             print(sistema.obtener_info_envio(id_job))
-        elif opcion == "4":
+        elif opcion == "3":
             nombre = input("Ingrese el nombre del empleado: ")
-            rol = input("Ingrese el rol del empleado (CONDUCTOR/QUIMICO): ")
-            if rol == "CONDUCTOR":
+            rol = input("Ingrese el rol del empleado (TRANSPORTISTA/QUIMICO/GERENTE_COMERCIAL): ")
+            if rol == "TRANSPORTISTA":
                 nuevo_empleado = Transportista(nombre)
             elif rol == "QUIMICO":
                 nuevo_empleado = Quimico(nombre)
+            elif rol == "GERENTE_COMERCIAL":
+                nuevo_empleado = GerenteComercial(nombre)
             else:
                 print("Rol no válido")
                 continue
             sistema.agregar_usuario(nuevo_empleado)
             print(f"Nuevo empleado {nombre} ingresado como {rol}")
-        elif opcion == "5":
+        elif opcion == "4":
             break
         else:
             print("Opción no válida")
@@ -253,6 +268,45 @@ def menu_quimico(sistema, quimico):
         else:
             print("Opción no válida")
 
+def menu_gerente_comercial(sistema, gerente):
+    while True:
+        print("\n--- Menú Gerente Comercial ---")
+        print("1. Ingresar nuevo cliente")
+        print("2. Crear nuevo envío")
+        print("3. Ver información del envío")
+        print("4. Salir")
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            nombre = input("Ingrese el nombre del cliente: ")
+            identificador = input("Ingrese el identificador del cliente: ")
+            nuevo_cliente = Cliente(nombre, identificador)
+            sistema.agregar_usuario(nuevo_cliente)
+            print(f"Nuevo cliente {nombre} ingresado")
+        elif opcion == "2":
+            identificador_cliente = input("Ingrese el identificador del cliente: ")
+            if identificador_cliente in sistema.clientes:
+                cliente = sistema.clientes[identificador_cliente]
+                guia_aerea = input("Ingrese el número de guía aérea: ")
+                tipo_producto = input("Ingrese el tipo de producto: ")
+                destino = input("Ingrese el destino: ")
+                temperatura = input("Ingrese la temperatura requerida: ")
+                hora_entrega = input("Ingrese la hora de entrega (YYYY-MM-DD HH:MM): ")
+                hora_entrega = datetime.datetime.strptime(hora_entrega, "%Y-%m-%d %H:%M")
+                id_job = sistema.crear_envio(guia_aerea, cliente, tipo_producto, destino, temperatura, hora_entrega)
+                print(f"Nuevo envío creado con ID: {id_job}")
+            else:
+                print("Cliente no encontrado")
+        elif opcion == "3":
+            id_job = input("Ingrese el ID del envío: ")
+            print(sistema.obtener_info_envio(id_job))
+        elif opcion == "4":
+            break
+        else:
+            print("Opción no válida")
+
+
+
 def menu_principal():
     sistema = SistemaSeguimiento()
     
@@ -263,7 +317,8 @@ def menu_principal():
         print("3. Transportista")
         print("4. Logística")
         print("5. Químico")
-        print("6. Salir")
+        print("6. Gerente Comercial")
+        print("7. Salir")
         opcion = input("Seleccione su tipo de usuario: ")
         
         if opcion == "1":
@@ -301,7 +356,60 @@ def menu_principal():
             else:
                 print("No hay personal químico registrado")
         elif opcion == "6":
+            if sistema.usuarios:
+                gerentes = [usuario for usuario in sistema.usuarios.values() if usuario.rol == Rol.GERENTE_COMERCIAL]
+                if gerentes:
+                    print("Gerentes Comerciales disponibles:")
+                    for i, gerente in enumerate(gerentes):
+                        print(f"{i+1}. {gerente.nombre}")
+                    seleccion = int(input("Seleccione un Gerente Comercial: ")) - 1
+                    if 0 <= seleccion < len(gerentes):
+                        menu_gerente_comercial(sistema, gerentes[seleccion])
+                    else:
+                        print("Selección no válida")
+                else:
+                    print("No hay Gerentes Comerciales registrados")
+            else:
+                print("No hay usuarios registrados en el sistema")
+        elif opcion == "7":
             print("Gracias por usar el Sistema de Seguimiento")
+            break
+        else:
+            print("Opción no válida")
+
+def menu_gerente_comercial(sistema, gerente):
+    while True:
+        print("\n--- Menú Gerente Comercial ---")
+        print("1. Registrar nuevo cliente")
+        print("2. Crear nuevo envío")
+        print("3. Ver información de un envío")
+        print("4. Salir")
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            nombre = input("Ingrese el nombre del cliente: ")
+            identificador = input("Ingrese el identificador del cliente: ")
+            nuevo_cliente = Cliente(nombre, identificador)
+            sistema.agregar_usuario(nuevo_cliente)
+            print(f"Nuevo cliente {nombre} registrado con éxito")
+        elif opcion == "2":
+            identificador_cliente = input("Ingrese el identificador del cliente: ")
+            if identificador_cliente in sistema.clientes:
+                cliente = sistema.clientes[identificador_cliente]
+                guia_aerea = input("Ingrese el número de guía aérea: ")
+                tipo_producto = input("Ingrese el tipo de producto: ")
+                destino = input("Ingrese el destino: ")
+                temperatura = input("Ingrese la temperatura requerida: ")
+                hora_entrega = input("Ingrese la hora de entrega (YYYY-MM-DD HH:MM): ")
+                hora_entrega = datetime.datetime.strptime(hora_entrega, "%Y-%m-%d %H:%M")
+                id_job = sistema.crear_envio(guia_aerea, cliente, tipo_producto, destino, temperatura, hora_entrega)
+                print(f"Nuevo envío creado con ID: {id_job}")
+            else:
+                print("Cliente no encontrado")
+        elif opcion == "3":
+            id_job = input("Ingrese el ID del envío: ")
+            print(sistema.obtener_info_envio(id_job))
+        elif opcion == "4":
             break
         else:
             print("Opción no válida")
