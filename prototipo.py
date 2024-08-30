@@ -134,9 +134,6 @@ def menu_cliente(sistema, cliente):
                 print("No tiene pedidos registrados.")
         elif opcion == "2" or opcion == "3":
             id_job = input("Ingrese el ID del envío: ")
-            if id_job!=7:
-                print('Debe ingresar un JOB de 4 dígitos')
-                break
             if id_job in sistema.envios:
                 pass
             else:
@@ -502,11 +499,6 @@ def menu_gerente_comercial(sistema, gerente):
         
         if opcion == "1":
             nombre = input("Ingrese el nombre del cliente: ")
-            if isinstance (nombre, int):
-                pass
-            else:
-                print("Debes ingresar un nombre")
-                break
             identificador = input("Ingrese el identificador del cliente: ")
             try:
                 numero = int(identificador)  
