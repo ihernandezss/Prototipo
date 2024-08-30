@@ -134,6 +134,9 @@ def menu_cliente(sistema, cliente):
                 print("No tiene pedidos registrados.")
         elif opcion == "2" or opcion == "3":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job!=7:
+                print('Debe ingresar un JOB de 4 dígitos')
+                break
             if id_job in sistema.envios:
                 pass
             else:
