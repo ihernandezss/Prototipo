@@ -134,6 +134,11 @@ def menu_cliente(sistema, cliente):
                 print("No tiene pedidos registrados.")
         elif opcion == "2" or opcion == "3":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             if opcion == "2":
                 print(sistema.obtener_info_envio(id_job))
             else:
@@ -153,6 +158,11 @@ def menu_destinatario(sistema):
         
         if opcion == "1" or opcion == "2":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             if opcion == "1":
                 print(sistema.obtener_info_envio(id_job))
             else:
@@ -172,6 +182,11 @@ def menu_transportista(sistema, transportista):
         
         if opcion == "1":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
             if nuevo_estado == "RECIBIDO":
                 pass
@@ -205,16 +220,47 @@ def menu_transportista(sistema, transportista):
 def menu_logistica(sistema):
     while True:
         print("\n--- Menú Logística ---")
-        print("1. Modificar datos de envío")
-        print("2. Ver información del envío")
-        print("3. Agregar empleado")
-        print("4. Salir")
+        print("1. Editar estado del envío")
+        print("2. Modificar datos de envío")
+        print("3. Ver información del envío")
+        print("4. Agregar empleado")
+        print("5. Salir")
         opcion = input("Seleccione una opción: ")
-        
+
+
         if opcion == "1":
+            id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
+            nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
+            if nuevo_estado == "RECIBIDO":
+                pass
+            elif nuevo_estado == "EN_REPARTO_AEREO":
+                pass
+            elif nuevo_estado == "VIAJANDO_A_TU_DESTINO":
+                pass
+            elif nuevo_estado == "EN_CENTRO_LOGISTICO":
+                pass
+            elif nuevo_estado == "EN_CAMINO_HACIA_TI":
+                pass
+            elif nuevo_estado == "ENTREGADO":
+                pass
+            else:
+                print("Estado no válido")
+                continue
+            ubicacion = input("Ingrese la ubicación actual: ")
+            if sistema.actualizar_estado_envio(id_job, EstadoEnvio[nuevo_estado], ubicacion):
+                print("Estado actualizado con éxito")
+            else:
+                print("No se pudo actualizar el estado")
+        
+        elif opcion == "2":
             id_job = input("Ingrese el ID del envío a modificar: ")
             if id_job not in sistema.envios:
-                print (f'No se ha encontrado ningún envío con el JOB {id_job}')
+                print (f'No se ha encontrado ningún envío con el {id_job}')
                 break
             if id_job in sistema.envios:
                 envio = sistema.envios[id_job]
@@ -240,10 +286,15 @@ def menu_logistica(sistema):
                 print(sistema.obtener_info_envio(id_job))
             else:
                 print("Envío no encontrado")
-        elif opcion == "2":
-            id_job = input("Ingrese el ID del envío: ")
-            print(sistema.obtener_info_envio(id_job))
         elif opcion == "3":
+            id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
+            print(sistema.obtener_info_envio(id_job))
+        elif opcion == "4":
             nombre = input("\nIngrese el nombre del empleado: ")
             rol = input("Ingrese el rol del empleado (TRANSPORTISTA/QUIMICO/GERENTE_COMERCIAL): ")
             if rol == "TRANSPORTISTA":
@@ -257,7 +308,7 @@ def menu_logistica(sistema):
                 continue
             sistema.agregar_usuario(nuevo_empleado)
             print(f"Nuevo empleado {nombre} ingresado como {rol}")
-        elif opcion == "4":
+        elif opcion == "5":
             break
         else:
             print("Opción no válida")
@@ -275,7 +326,7 @@ def menu_quimico(sistema, quimico):
             if id_job in sistema.envios:
                 pass
             else:
-                print(f'No se ha encontrado ningún envío con el JOB {id_job}')
+                print(f'No se ha encontrado ningún envío con el {id_job}')
                 break
             nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
             if nuevo_estado == "RECIBIDO":
@@ -300,6 +351,11 @@ def menu_quimico(sistema, quimico):
                 print("No se pudo actualizar el estado")
         elif opcion == "2":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             print(sistema.obtener_info_envio(id_job))
         elif opcion == "3":
             break
@@ -349,6 +405,11 @@ def menu_gerente_comercial(sistema, gerente):
                 print("Cliente no encontrado")
         elif opcion == "3":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             print(sistema.obtener_info_envio(id_job))
         elif opcion == "4":
             break
@@ -458,6 +519,11 @@ def menu_gerente_comercial(sistema, gerente):
                 print("Cliente no encontrado")
         elif opcion == "3":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el {id_job}')
+                break
             print(sistema.obtener_info_envio(id_job))
         elif opcion == "4":
             break
