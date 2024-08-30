@@ -310,10 +310,22 @@ def menu_gerente_comercial(sistema, gerente):
         
         if opcion == "1":
             nombre = input("Ingrese el nombre del cliente: ")
+            if isinstance (nombre, str):
+                pass
+            else:
+                print("Debes ingresar un nombre")
             identificador = input("Ingrese el identificador del cliente: ")
-            nuevo_cliente = Cliente(nombre, identificador)
-            sistema.agregar_usuario(nuevo_cliente)
-            print(f"Nuevo cliente {nombre} ingresado")
+            try:
+                numero = int(identificador)  
+            except ValueError:
+                print("Debes ingresar un valor numérico")
+                return
+            if identificador not in sistema.clientes:
+                nuevo_cliente = Cliente(nombre, identificador)
+                sistema.agregar_usuario(nuevo_cliente)
+                print(f"Nuevo cliente {nombre} ingresado")
+            else: 
+                print('El cliente ya se encuentra registrado')
         elif opcion == "2":
             identificador_cliente = input("Ingrese el identificador del cliente: ")
             if identificador_cliente in sistema.clientes:
