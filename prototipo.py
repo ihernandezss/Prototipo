@@ -213,12 +213,13 @@ def menu_logistica(sistema):
         
         if opcion == "1":
             id_job = input("Ingrese el ID del envío a modificar: ")
+            if id_job not in sistema.envios:
+                print (f'No se ha encontrado ningún envío con el JOB {id_job}')
+                break
             if id_job in sistema.envios:
                 envio = sistema.envios[id_job]
                 print("Datos actuales del envío:")
                 print(sistema.obtener_info_envio(id_job))
-            else:
-                print (f'No se ha encontrado ningún envío con el JOB {id_job}')
                 tipo_producto = input("Nuevo tipo de producto (deje en blanco para no modificar): ")
                 if tipo_producto:
                     envio.tipo_producto = tipo_producto
