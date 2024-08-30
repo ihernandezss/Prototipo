@@ -217,7 +217,8 @@ def menu_logistica(sistema):
                 envio = sistema.envios[id_job]
                 print("Datos actuales del envío:")
                 print(sistema.obtener_info_envio(id_job))
-                
+            else:
+                print (f'No se ha encontrado ningún envío con el JOB {id_job}')
                 tipo_producto = input("Nuevo tipo de producto (deje en blanco para no modificar): ")
                 if tipo_producto:
                     envio.tipo_producto = tipo_producto
@@ -270,6 +271,11 @@ def menu_quimico(sistema, quimico):
         
         if opcion == "1":
             id_job = input("Ingrese el ID del envío: ")
+            if id_job in sistema.envios:
+                pass
+            else:
+                print(f'No se ha encontrado ningún envío con el JOB {id_job}')
+                break
             nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
             if nuevo_estado == "RECIBIDO":
                 pass
