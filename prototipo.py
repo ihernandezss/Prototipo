@@ -3,10 +3,10 @@ from enum import Enum
 
 class EstadoEnvio(Enum):
     RECIBIDO = "Recibimos tu envío"
-    EN_TRANSITO_AEREO = "En reparto aéreo"
-    EN_TRANSITO_TERRESTRE = "Viajando a tu destino"
+    EN_REPARTO_AEREO = "En reparto aéreo"
+    VIAJANDO_A_TU_DESTINO = "Viajando a tu destino"
     EN_CENTRO_LOGISTICO = "En centro logístico (bodega)"
-    EN_CAMINO = "En camino hacia ti"
+    EN_CAMINO_HACIA_TI = "En camino hacia ti"
     ENTREGADO = "Entregado"
 
 class Rol(Enum):
@@ -270,7 +270,22 @@ def menu_quimico(sistema, quimico):
         
         if opcion == "1":
             id_job = input("Ingrese el ID del envío: ")
-            nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_TRANSITO_AEREO, EN_TRANSITO_TERRESTRE, EN_CENTRO_LOGISTICO, EN_CAMINO, ENTREGADO): ")
+            nuevo_estado = input("Ingrese el nuevo estado (RECIBIDO, EN_REPARTO_AEREO, VIAJANDO_A_TU_DESTINO, EN_CENTRO_LOGISTICO, EN_CAMINO_HACIA_TI, ENTREGADO): ") 
+            if nuevo_estado == "RECIBIDO":
+                pass
+            elif nuevo_estado == "EN_REPARTO_AEREO":
+                pass
+            elif nuevo_estado == "VIAJANDO_A_TU_DESTINO":
+                pass
+            elif nuevo_estado == "EN_CENTRO_LOGISTICO":
+                pass
+            elif nuevo_estado == "EN_CAMINO_HACIA_TI":
+                pass
+            elif nuevo_estado == "ENTREGADO":
+                pass
+            else:
+                print("Estado no válido")
+                continue
             ubicacion = input("Ingrese la ubicación actual: ")
             if sistema.actualizar_estado_envio(id_job, EstadoEnvio[nuevo_estado], ubicacion):
                 print("Estado actualizado con éxito")
