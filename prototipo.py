@@ -515,7 +515,7 @@ def menu_gerente_comercial(sistema, gerente):
             identificador_cliente = input("Ingrese el identificador del cliente: ")
             if identificador_cliente in sistema.clientes:
                 cliente = sistema.clientes[identificador_cliente]
-                guia_aerea = input("Ingrese el número de guía aérea: ")
+                guia_aerea = input("Ingrese el número de guía aérea(SI ES SU CASO): ")
                 tipo_producto = input("Ingrese el tipo de producto: ")
                 destino = input("Ingrese el destino: ")
                 temperatura = input("Ingrese la temperatura requerida: ")
